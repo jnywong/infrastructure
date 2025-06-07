@@ -21,6 +21,9 @@ CONFIG_CLUSTERS_PATH = REPO_ROOT_PATH.joinpath("config/clusters")
 
 
 def get_cluster_names():
+    """
+    Return all cluster names from the config/clusters directory.
+    """
     cluster_names = []
     for config_file_path in get_all_cluster_yaml_files():
         with open(config_file_path) as f:
@@ -118,6 +121,9 @@ def remove_from_text_file(cluster_name: str, hub_name: str, file_name: str):
 
 
 def log_out_from_hub(gh_auth_hubs: list[tuple[str, str]], file_name: str):
+    """
+    Loop over the list of GitHub authenticated hubs and log out users by deleting the cookie_secret and redeploying the hub.
+    """
     for cluster_name, hub_name in gh_auth_hubs:
         logger.debug(f"Logging users out of {cluster_name}:{hub_name}")
         cluster = Cluster.from_name(cluster_name)
@@ -158,17 +164,22 @@ def log_out_from_hub(gh_auth_hubs: list[tuple[str, str]], file_name: str):
                 )
                 logger.info(output_delete_secret.decode().strip())
                 # Deploy hub to regenerate cookie_secret
-                output_deployer_deploy = subprocess.check_output(
+                process_deployer_deploy = subprocess.Popen(
                     [
                         "deployer",
                         "deploy",
                         cluster_name,
                         hub_name,
-                    ]
+                    ],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
                 )
-                logger.debug(output_deployer_deploy.decode().strip())
+                with process_deployer_deploy.stdout:
+                    for line in iter(process_deployer_deploy.stdout.readline, b""):
+                        logger.debug(line.decode().strip())
+
                 logger.info(f"{cluster_name}:{hub_name} - redeployed.")
-        remove_from_text_file(cluster_name, hub_name, file_name)
+                remove_from_text_file(cluster_name, hub_name, file_name)
 
 
 def main():
@@ -188,12 +199,6 @@ def main():
         write_to_text_file(gh_auth_hubs, file_name)
     gh_auth_hubs = read_from_text_file(file_name)
     logger.info(f"GitHub authenticated hubs: {gh_auth_hubs}")
-
-    # Test hubs
-    gh_auth_hubs = [
-        # ("leap", "prod"),
-        ("2i2c-aws-us", "staging"),
-    ]
 
     log_out_from_hub(gh_auth_hubs, file_name)
 
