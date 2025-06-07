@@ -103,36 +103,29 @@ def read_from_text_file(file_name: str) -> list[str]:
     return hubs_list
 
 
-def main():
-    logging.basicConfig(
-        filename="gh_logout.log",
-        filemode="w",
-        level=logging.DEBUG,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-    )
+def remove_from_text_file(cluster_name: str, hub_name: str, file_name: str):
+    """
+    Remove a specific cluster and hub from the text file.
+    """
+    with open(file_name) as f:
+        lines = f.readlines()
 
-    if not os.path.exists("gh_auth_hubs.txt"):
-        cluster_names = get_cluster_names()
-        logger.info(f"Found clusters: {cluster_names}")
-        gh_auth_hubs = get_gh_auth_hubs(cluster_names)
-        write_to_text_file(gh_auth_hubs, "gh_auth_hubs.txt")
-    gh_auth_hubs = read_from_text_file("gh_auth_hubs.txt")
-    logger.info(f"GitHub authenticated hubs: {gh_auth_hubs}")
+    with open(file_name, "w") as f:
+        for line in lines:
+            if not (f"['{cluster_name}', '{hub_name}']" in line):
+                f.write(line)
+    logger.info(f"Removed {cluster_name}:{hub_name} from {file_name}")
 
-    # Test hubs
-    gh_auth_hubs = [
-        ("leap", "prod"),
-        # ('2i2c-aws-us', 'showcase'),
-    ]
 
-    #  TODO: make this loop concurrent
+def log_out_from_hub(gh_auth_hubs: list[tuple[str, str]], file_name: str):
     for cluster_name, hub_name in gh_auth_hubs:
         logger.debug(f"Logging users out of {cluster_name}:{hub_name}")
         cluster = Cluster.from_name(cluster_name)
 
         with cluster.auth():
+            # Determine if the hub has user pods running
             has_users = False
-            output = subprocess.check_output(
+            get_pod = subprocess.check_output(
                 [
                     "kubectl",
                     "-n",
@@ -141,12 +134,68 @@ def main():
                     "pod",
                 ]
             )
-            has_users = True if "jupyter-" in output.decode() else False
+            has_users = True if "jupyter-" in get_pod.decode() else False
             (
                 logger.info(f"{cluster_name}:{hub_name} - User pods found.")
                 if has_users
                 else logger.info(f"{cluster_name}:{hub_name} - No user pods found.")
             )
+            if has_users:
+                pass
+            else:
+                # Delete hub.config.JupyterHub.cookie_secret
+                output_delete_secret = subprocess.check_output(
+                    [
+                        "kubectl",
+                        "-n",
+                        hub_name,
+                        "patch",
+                        "secret",
+                        "hub",
+                        "--type=json",
+                        "-p=[{'op': 'remove', 'path': '/data/hub.config.JupyterHub.cookie_secret'}]",
+                    ]
+                )
+                logger.info(output_delete_secret.decode().strip())
+                # Deploy hub to regenerate cookie_secret
+                output_deployer_deploy = subprocess.check_output(
+                    [
+                        "deployer",
+                        "deploy",
+                        cluster_name,
+                        hub_name,
+                    ]
+                )
+                logger.debug(output_deployer_deploy.decode().strip())
+                logger.info(f"{cluster_name}:{hub_name} - redeployed.")
+        remove_from_text_file(cluster_name, hub_name, file_name)
+
+
+def main():
+    logging.basicConfig(
+        filename="gh_logout.log",
+        filemode="w",
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+    )
+
+    file_name = "gh_auth_hubs.txt"
+
+    if not os.path.exists(file_name):
+        cluster_names = get_cluster_names()
+        logger.info(f"Found clusters: {cluster_names}")
+        gh_auth_hubs = get_gh_auth_hubs(cluster_names)
+        write_to_text_file(gh_auth_hubs, file_name)
+    gh_auth_hubs = read_from_text_file(file_name)
+    logger.info(f"GitHub authenticated hubs: {gh_auth_hubs}")
+
+    # Test hubs
+    gh_auth_hubs = [
+        # ("leap", "prod"),
+        ("2i2c-aws-us", "staging"),
+    ]
+
+    log_out_from_hub(gh_auth_hubs, file_name)
 
 
 if __name__ == "__main__":
