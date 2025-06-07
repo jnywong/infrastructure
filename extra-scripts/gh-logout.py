@@ -4,6 +4,7 @@ A script to force one-time logout of GitHub authenticated users.
 
 import logging
 import os
+import subprocess
 from pathlib import Path
 
 from ruamel.yaml import YAML
@@ -97,7 +98,7 @@ def read_from_text_file(file_name: str) -> list[str]:
     Read the list of GitHub authenticated hubs from a text file.
     """
     with open(file_name) as f:
-        hubs_list = [eval(line.strip()) for line in f.readlines()]
+        hubs_list = [tuple(eval(line.strip())) for line in f.readlines()]
     logger.info(f"Read {len(hubs_list)} GitHub authenticated hubs from {file_name}")
     return hubs_list
 
@@ -118,7 +119,34 @@ def main():
     gh_auth_hubs = read_from_text_file("gh_auth_hubs.txt")
     logger.info(f"GitHub authenticated hubs: {gh_auth_hubs}")
 
-    gh_auth_hubs = [["2i2c-aws-us", "staging"]]  # Test one hub
+    # Test hubs
+    gh_auth_hubs = [
+        ("leap", "prod"),
+        # ('2i2c-aws-us', 'showcase'),
+    ]
+
+    #  TODO: make this loop concurrent
+    for cluster_name, hub_name in gh_auth_hubs:
+        logger.debug(f"Logging users out of {cluster_name}:{hub_name}")
+        cluster = Cluster.from_name(cluster_name)
+
+        with cluster.auth():
+            has_users = False
+            output = subprocess.check_output(
+                [
+                    "kubectl",
+                    "-n",
+                    hub_name,
+                    "get",
+                    "pod",
+                ]
+            )
+            has_users = True if "jupyter-" in output.decode() else False
+            (
+                logger.info(f"{cluster_name}:{hub_name} - User pods found.")
+                if has_users
+                else logger.info(f"{cluster_name}:{hub_name} - No user pods found.")
+            )
 
 
 if __name__ == "__main__":
