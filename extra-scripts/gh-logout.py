@@ -1,3 +1,8 @@
+"""
+A script to force one-time logout of GitHub authenticated users.
+"""
+
+import logging
 import os
 from pathlib import Path
 
@@ -6,9 +11,11 @@ from ruamel.yaml import YAML
 from deployer.infra_components.cluster import Cluster
 from deployer.utils.file_acquisition import get_all_cluster_yaml_files
 
+logger = logging.getLogger(__name__)
+
 yaml = YAML(typ="safe", pure=True)
 
-REPO_ROOT_PATH = Path(__file__).parent
+REPO_ROOT_PATH = Path(__file__).parent.parent
 CONFIG_CLUSTERS_PATH = REPO_ROOT_PATH.joinpath("config/clusters")
 
 
@@ -24,29 +31,30 @@ def get_cluster_names():
     return cluster_names
 
 
-def main():
-    cluster_names = get_cluster_names()
-
-    gh_auth_list = []
+def get_gh_auth_hubs(cluster_names: list[str]) -> list[list[str]]:
+    """
+    Return a list of clusters and hubs that use GitHub authentication.
+    """
+    hubs_list = []
     for c in cluster_names:
         gh_auth = False
         cluster = Cluster.from_name(c)
-        print(f"Checking cluster {cluster.spec.get('name')}")
+        logger.debug(f"Checking cluster {cluster.spec.get('name')}")
         for hub in cluster.hubs:
-            print(f"Checking hub {hub.spec.get('name')}")
+            logger.debug(f"Checking hub {hub.spec.get('name')}")
             values_files = hub.spec.get("helm_chart_values_files")
             # Ignore encrypted files and reorder to check common files last since hub-specific files may override them.
             values_files = [
                 f for f in values_files if ("common" not in f) and ("enc" not in f)
             ] + [f for f in values_files if ("common" in f) and ("enc" not in f)]
             for vf in values_files:
-                print(vf)
+                logger.debug(vf)
                 with open(CONFIG_CLUSTERS_PATH / c / vf) as f:
                     value_config = yaml.load(f)
                     if "basehub" in value_config.keys():
                         value_config = value_config["basehub"]
                     if "common" not in vf:
-                        print(f"Checking {vf} for {hub.spec.get('name')}")
+                        logger.debug(f"Checking {vf} for {hub.spec.get('name')}")
                         try:
                             authenticator_class = value_config["jupyterhub"]["hub"][
                                 "config"
@@ -54,10 +62,10 @@ def main():
                         except KeyError:
                             continue
                         gh_auth = True if authenticator_class == "github" else False
-                        print(f"{gh_auth}")
+                        logger.debug(f"{gh_auth}")
                         break
                     else:
-                        print(f"Checking common {vf} for {hub.spec.get('name')}")
+                        logger.debug(f"Checking common {vf} for {hub.spec.get('name')}")
                         try:
                             authenticator_class = value_config["jupyterhub"]["hub"][
                                 "config"
@@ -65,8 +73,52 @@ def main():
                         except KeyError:
                             continue
                         gh_auth = True if authenticator_class == "github" else False
-                        print(f"{gh_auth}")
-            gh_auth_list.append([c, hub.spec.get("name"), gh_auth])
+                        logger.debug(f"{gh_auth}")
+            hubs_list.append([c, hub.spec.get("name"), gh_auth])
+    gh_auth_hubs = [item[:2] for item in hubs_list if item[2] is True]
+    logger.debug(
+        f"Number of GitHub authenticated hubs = ({len(gh_auth_hubs)}/{len(hubs_list)})"
+    )
+    return gh_auth_hubs
+
+
+def write_to_text_file(hubs_list: list[list[str]], file_name: str):
+    """
+    Write the list of GitHub authenticated hubs to a text file.
+    """
+    with open(file_name, "w") as f:
+        for hub in hubs_list:
+            f.write(f"{hub}\n")
+    logger.info(f"GitHub authenticated hubs written to {file_name}")
+
+
+def read_from_text_file(file_name: str) -> list[str]:
+    """
+    Read the list of GitHub authenticated hubs from a text file.
+    """
+    with open(file_name) as f:
+        hubs_list = [eval(line.strip()) for line in f.readlines()]
+    logger.info(f"Read {len(hubs_list)} GitHub authenticated hubs from {file_name}")
+    return hubs_list
+
+
+def main():
+    logging.basicConfig(
+        filename="gh_logout.log",
+        filemode="w",
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+    )
+
+    if not os.path.exists("gh_auth_hubs.txt"):
+        cluster_names = get_cluster_names()
+        logger.info(f"Found clusters: {cluster_names}")
+        gh_auth_hubs = get_gh_auth_hubs(cluster_names)
+        write_to_text_file(gh_auth_hubs, "gh_auth_hubs.txt")
+    gh_auth_hubs = read_from_text_file("gh_auth_hubs.txt")
+    logger.info(f"GitHub authenticated hubs: {gh_auth_hubs}")
+
+    gh_auth_hubs = [["2i2c-aws-us", "staging"]]  # Test one hub
 
 
 if __name__ == "__main__":
