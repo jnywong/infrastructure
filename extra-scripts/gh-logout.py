@@ -31,7 +31,6 @@ def get_cluster_names():
         cluster_names.append(os.path.basename(config_file_path.parent))
 
     cluster_names = sorted(cluster_names)
-    # cluster_names = ["2i2c-aws-us"]  # limit to one cluster for testing
     return cluster_names
 
 
@@ -197,6 +196,7 @@ def main():
         logger.info(f"Found clusters: {cluster_names}")
         gh_auth_hubs = get_gh_auth_hubs(cluster_names)
         write_to_text_file(gh_auth_hubs, file_name)
+
     gh_auth_hubs = read_from_text_file(file_name)
     logger.info(f"GitHub authenticated hubs: {gh_auth_hubs}")
 
