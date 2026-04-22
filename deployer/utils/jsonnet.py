@@ -33,6 +33,7 @@ def render_jsonnet(
     cluster_name: str,
     hub_name: str | None,
     provider: str,
+    hub_domain: str | None,
     aws_account_id: str | None = None,
 ):
     """
@@ -58,6 +59,8 @@ def render_jsonnet(
     ]
     if hub_name is not None:
         command += ["--ext-str", f"VARS_2I2C_HUB_NAME={hub_name}"]
+    if hub_domain is not None:
+        command += ["--ext-str", f"VARS_2I2C_HUB_DOMAIN={hub_domain}"]
     if provider is not None:
         command += ["--ext-str", f"VARS_2I2C_PROVIDER={provider}"]
     if aws_account_id is not None:
