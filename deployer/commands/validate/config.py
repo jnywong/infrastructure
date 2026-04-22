@@ -79,7 +79,7 @@ def _prepare_hub_helm_charts_dependencies_and_schema(hub_chart_dir, legacy_dasku
 def validate_hub_config(
     cluster_name,
     hub_name,
-    helm_chart_dir="",
+    helm_chart_dir: Path,
     skip_refresh=False,
     debug=False,
 ):
@@ -90,8 +90,6 @@ def validate_hub_config(
     cluster = Cluster.from_name(cluster_name)
     hub = next((h for h in cluster.hubs if h.spec["name"] == hub_name), None)
 
-    if not helm_chart_dir:
-        helm_chart_dir = HELM_CHARTS_DIR / hub.spec["helm_chart"]
     if not skip_refresh:
         _prepare_hub_helm_charts_dependencies_and_schema(
             helm_chart_dir, hub.legacy_daskhub
@@ -106,6 +104,20 @@ def validate_hub_config(
         cmd.append("--debug")
 
     with ExitStack() as jsonnet_stack:
+
+        # Add on rendered jsonnet values.yaml file for the chart
+        rendered_values_path = jsonnet_stack.enter_context(
+            render_jsonnet(
+                helm_chart_dir / "values.jsonnet",
+                cluster.spec["name"],
+                hub.spec["name"],
+                cluster.spec["provider"],
+                hub_domain=hub.spec["domain"]
+            )
+        )
+
+        cmd += ["--values", rendered_values_path]
+
         for values_file in hub.spec["helm_chart_values_files"]:
             # FIXME: The logic here for figuring out non secret files is not correct
             if values_file.endswith(".jsonnet"):
@@ -115,6 +127,7 @@ def validate_hub_config(
                         cluster_name,
                         hub_name,
                         cluster.spec["provider"],
+                        hub_domain=hub.spec["domain"]
                     )
                 )
                 cmd.append(f"--values={rendered_file}")
@@ -271,6 +284,7 @@ def support_config(
                             cluster_name,
                             None,
                             cluster.spec["provider"],
+                            hub_domain=None
                         )
                     )
                     cmd.append(f"--values={rendered_file}")
