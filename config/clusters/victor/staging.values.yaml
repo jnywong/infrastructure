@@ -24,11 +24,6 @@ basehub:
         QuotaManager:
           hard_quota: 5 # in GiB
   jupyterhub:
-    ingress:
-      hosts: [staging.hub.victorproject.org]
-      tls:
-      - hosts: [staging.hub.victorproject.org]
-        secretName: https-auto-tls
     hub:
       config:
         CILogonOAuthenticator:

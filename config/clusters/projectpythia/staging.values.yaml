@@ -7,11 +7,6 @@ jupyterhub-home-nfs:
 
 
 jupyterhub:
-  ingress:
-    hosts: [staging.projectpythia.2i2c.cloud]
-    tls:
-    - hosts: [staging.projectpythia.2i2c.cloud]
-      secretName: https-auto-tls
   custom:
     homepage:
       templateVars:

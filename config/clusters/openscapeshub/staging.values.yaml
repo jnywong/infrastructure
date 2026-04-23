@@ -6,11 +6,6 @@ basehub:
     annotations:
       eks.amazonaws.com/role-arn: arn:aws:iam::783616723547:role/openscapeshub-staging
   jupyterhub:
-    ingress:
-      hosts: [staging.openscapes.2i2c.cloud]
-      tls:
-      - hosts: [staging.openscapes.2i2c.cloud]
-        secretName: https-auto-tls
     singleuser:
       nodeSelector:
         2i2c/hub-name: staging
