@@ -43,6 +43,7 @@ def render_jsonnet(
         - cluster_name
         - provider
         - hub_name (optional)
+        - hub_domain (optional)
 
     Top-level arguments can be referenced in jsonnet even if they are undefined.
     The following variables are passed as top-level arguments to jsonnet:
