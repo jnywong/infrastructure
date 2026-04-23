@@ -165,7 +165,7 @@ class Hub:
                     self.cluster.spec["name"],
                     self.spec["name"],
                     self.cluster.spec["provider"],
-                    hub_domain=self.spec["domain"]
+                    hub_domain=self.spec["domain"],
                 )
             )
 
@@ -187,7 +187,7 @@ class Hub:
                             self.cluster.spec["name"],
                             self.spec["name"],
                             self.cluster.spec["provider"],
-                            hub_domain=self.spec["domain"]
+                            hub_domain=self.spec["domain"],
                         )
                     )
                     cmd.append(f"--values={rendered_path}")

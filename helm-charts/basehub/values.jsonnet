@@ -123,18 +123,18 @@ local hubIngressConfig = {
   tls: [
     {
       hosts: [hub_domain],
-      secretName: "https-auto-tls"
-    }
-  ]
+      secretName: 'https-auto-tls',
+    },
+  ],
 };
 
 local jupyterhubConfig = {
-  ingress: hubIngressConfig
+  ingress: hubIngressConfig,
 };
 
 emitDaskHubCompatibleConfig({
   nfs: nfsConfig,
   'jupyterhub-home-nfs': jupyterhubHomeNFSConfig,
   'jupyterhub-groups-exporter': jupyterhubGroupsExporterConfig,
-  jupyterhub: jupyterhubConfig
+  jupyterhub: jupyterhubConfig,
 })

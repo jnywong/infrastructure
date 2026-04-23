@@ -112,7 +112,7 @@ def validate_hub_config(
                 cluster.spec["name"],
                 hub.spec["name"],
                 cluster.spec["provider"],
-                hub_domain=hub.spec["domain"]
+                hub_domain=hub.spec["domain"],
             )
         )
 
@@ -127,7 +127,7 @@ def validate_hub_config(
                         cluster_name,
                         hub_name,
                         cluster.spec["provider"],
-                        hub_domain=hub.spec["domain"]
+                        hub_domain=hub.spec["domain"],
                     )
                 )
                 cmd.append(f"--values={rendered_file}")
@@ -284,7 +284,7 @@ def support_config(
                             cluster_name,
                             None,
                             cluster.spec["provider"],
-                            hub_domain=None
+                            hub_domain=None,
                         )
                     )
                     cmd.append(f"--values={rendered_file}")
