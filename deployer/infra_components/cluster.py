@@ -444,14 +444,6 @@ class Cluster:
         with open(config_file) as f:
             support_config = yaml.load(f)
 
-        # Don't return the address if the prometheus instance wasn't securely exposed to the outside.
-        if not support_config.get("prometheusIngressAuthSecret", {}).get(
-            "enabled", False
-        ):
-            raise ValueError(
-                f"""`prometheusIngressAuthSecret` wasn't configured for {self.spec["name"]}"""
-            )
-
         tls_config = (
             support_config.get("prometheus", {})
             .get("server", {})
@@ -480,12 +472,15 @@ class Cluster:
                 support_config = yaml.load(f)
 
         # Don't return the address if the prometheus instance wasn't securely exposed to the outside.
-        if "prometheusIngressAuthSecret" not in support_config:
+        auth = (
+            support_config.get("prometheus", {})
+            .get("server", {})
+            .get("configmapReload", {})
+            .get("prometheus")
+        )
+        if auth is None:
             raise ValueError(
-                f"""`prometheusIngressAuthSecret` wasn't configured for {self.spec["name"]}"""
+                f"""`prometheus.configmapReload.prometheus` authentication wasn't configured for {self.spec["name"]}"""
             )
 
-        return (
-            support_config["prometheusIngressAuthSecret"]["users"][0]["username"],
-            support_config["prometheusIngressAuthSecret"]["users"][0]["password"],
-        )
+        return (auth["username"], auth["password"])
