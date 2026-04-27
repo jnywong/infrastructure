@@ -35,7 +35,7 @@ jupyterhub:
   hub:
     config:
       JupyterHub:
-        authenticator_class: dummy
+        authenticator_class: shared-password
       Authenticator:
         admin_users: []
   singleuser:

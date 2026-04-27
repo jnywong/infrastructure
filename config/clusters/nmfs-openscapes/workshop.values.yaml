@@ -32,7 +32,7 @@ jupyterhub:
     allowNamedServers: true
     config:
       JupyterHub:
-        authenticator_class: dummy
+        authenticator_class: shared-password
       Authenticator:
         manage_groups: false
         enable_auth_state: false

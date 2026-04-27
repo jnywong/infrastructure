@@ -175,7 +175,7 @@ basehub:
     hub:
       config:
         JupyterHub:
-          authenticator_class: dummy
+          authenticator_class: shared-password
         GitHubOAuthenticator: {}
         Authenticator:
           manage_groups: false

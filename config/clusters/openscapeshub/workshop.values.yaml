@@ -21,7 +21,7 @@ basehub:
       allowNamedServers: true
       config:
         JupyterHub:
-          authenticator_class: dummy
+          authenticator_class: shared-password
         Authenticator:
           enable_auth_state: false
           manage_groups: false
