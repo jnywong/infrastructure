@@ -180,3 +180,4 @@ basehub:
         Authenticator:
           manage_groups: false
           admin_users: []
+          allow_all: True

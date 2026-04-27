@@ -30,6 +30,7 @@ jupyterhub:
         admin_users: []
         enable_auth_state: false
         manage_groups: false
+        allow_all: true
   singleuser:
     nodeSelector:
       2i2c/hub-name: workshop

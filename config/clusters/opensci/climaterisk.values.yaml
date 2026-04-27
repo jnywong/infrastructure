@@ -38,6 +38,8 @@ jupyterhub:
         authenticator_class: shared-password
       Authenticator:
         admin_users: []
+        allow_all: true
+        manage_groups: false
   singleuser:
     defaultUrl: /lab/tree/climaterisk/book/Startup.ipynb
     image:

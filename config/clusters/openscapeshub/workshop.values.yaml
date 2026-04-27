@@ -26,6 +26,7 @@ basehub:
           enable_auth_state: false
           manage_groups: false
           admin_users: []
+          allow_all: true
     singleuser:
       storage:
         extraVolumeMounts:

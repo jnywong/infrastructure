@@ -37,6 +37,7 @@ jupyterhub:
         manage_groups: false
         enable_auth_state: false
         admin_users: []
+        allow_all: true
   singleuser:
     storage:
       extraVolumeMounts:
