@@ -195,6 +195,7 @@ def validate_authenticator_config(
     For each hub of a specific cluster it asserts that:
     - when the JupyterHub GitHubOAuthenticator is used, then allowed_users is not set
     - when the dummy authenticator is used, then admin_users is the empty list
+    - when the GenericOauthenticator is used, then oauth_callback_url is set
     """
 
     cluster = Cluster.from_name(cluster_name)
@@ -223,10 +224,19 @@ def validate_authenticator_config(
                 )
                 allowed_users = hub_config.get("Authenticator", {}).get("allowed_users")
                 admin_users = hub_config.get("Authenticator", {}).get("admin_users")
+                oauth_callback_url = hub_config.get("Authenticator", {}).get(
+                    "oauth_callback_url", None
+                )
                 org_based_github_auth = False
                 if hub_config.get("GitHubOAuthenticator", None):
                     org_based_github_auth = hub_config["GitHubOAuthenticator"].get(
                         "allowed_organizations", False
+                    )
+                elif not oauth_callback_url and hub_config.get(
+                    "GenericOAuthenticator", None
+                ):
+                    oauth_callback_url = hub_config["GenericOAuthenticator"].get(
+                        "oauth_callback_url", None
                     )
             except KeyError:
                 pass
@@ -236,6 +246,17 @@ def validate_authenticator_config(
         raise ValueError(f"""
                 Please unset `Authenticator.allowed_users` for {hub.spec["name"]} when GitHub Orgs/Teams is
                 being used for auth so valid members are not refused access.
+            """)
+    elif hub.authenticator == "dummy" and admin_users != []:
+        raise ValueError(f"""
+                For security reasons, please unset `Authenticator.admin_users` for {hub.spec["name"]} when the dummy authenticator is
+                being used for authentication.
+            """)
+    # If the authenticator class is generic, then raise an error
+    # if `Authenticator.oauth_callback_url` is not set
+    if hub.authenticator == "generic-oauth" and not oauth_callback_url:
+        raise ValueError(f"""
+                Please set `GenericOAuthenticator.callback_url` for {hub.spec["name"]} when GenericOauthenticator is used, otherwise it might be guessed incorrectly.
             """)
     elif hub.authenticator == "dummy" and admin_users != []:
         raise ValueError(f"""
