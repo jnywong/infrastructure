@@ -14,6 +14,8 @@ basehub:
           hard_quota: 40 # in GiB
   jupyterhub:
     custom:
+      2i2c:
+        add_staff_user_ids_to_admin_users: false
       singleuserAdmin:
         extraVolumeMounts:
       homepage:
@@ -175,8 +177,9 @@ basehub:
     hub:
       config:
         JupyterHub:
-          authenticator_class: dummy
+          authenticator_class: shared-password
         GitHubOAuthenticator: {}
         Authenticator:
           manage_groups: false
           admin_users: []
+          allow_all: true
