@@ -23,16 +23,16 @@ resource "aws_iam_role" "jupyterhub_grafana_cloudwatch" {
 }
 
 resource "aws_iam_role_policy" "jupyterhub_grafana_cloudwatch" {
-  name  = "jupyterhub_grafana_cloudwatch"
-  role  = aws_iam_role.jupyterhub_grafana_cloudwatch.name
+  name = "jupyterhub_grafana_cloudwatch"
+  role = aws_iam_role.jupyterhub_grafana_cloudwatch.name
   # ref: https://grafana.com/docs/grafana/latest/datasources/aws-cloudwatch/configure/#iam-policy-examples
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Sid": "AllowReadingMetricsFromCloudWatch",
-        "Effect": "Allow",
-        "Action": [
+        "Sid" : "AllowReadingMetricsFromCloudWatch",
+        "Effect" : "Allow",
+        "Action" : [
           "CloudWatch:DescribeAlarmsForMetric",
           "CloudWatch:DescribeAlarmHistory",
           "CloudWatch:DescribeAlarms",
@@ -40,7 +40,7 @@ resource "aws_iam_role_policy" "jupyterhub_grafana_cloudwatch" {
           "CloudWatch:GetMetricData",
           "CloudWatch:GetInsightRuleReport"
         ],
-        "Resource": "*"
+        "Resource" : "*"
       }
     ]
   })
