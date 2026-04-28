@@ -11,13 +11,6 @@ nfs:
     shareNameOverride: spyglass
 
 jupyterhub:
-  ingress:
-    hosts:
-    - staging.hhmi.2i2c.cloud
-    tls:
-    - secretName: https-auto-tls
-      hosts:
-      - staging.hhmi.2i2c.cloud
   custom:
     singleuserAdmin:
       # Turn off trying to mount shared-readwrite folder for admins

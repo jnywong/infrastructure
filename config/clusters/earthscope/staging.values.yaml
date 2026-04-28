@@ -4,12 +4,6 @@ basehub:
       eks.amazonaws.com/role-arn: arn:aws:iam::762698921361:role/earthscope-staging
 
   jupyterhub:
-    ingress:
-      hosts:
-      - staging.geolab.earthscope.cloud
-      tls:
-      - hosts: [staging.geolab.earthscope.cloud]
-        secretName: https-auto-tls
     custom:
       homepage:
         templateVars:

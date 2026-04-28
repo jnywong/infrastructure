@@ -7,13 +7,6 @@ jupyterhub-home-nfs:
 
 
 jupyterhub:
-  ingress:
-    hosts:
-    - staging.opensci.2i2c.cloud
-    tls:
-    - secretName: https-auto-tls
-      hosts:
-      - staging.opensci.2i2c.cloud
   custom:
     2i2c:
       add_staff_user_ids_to_admin_users: true

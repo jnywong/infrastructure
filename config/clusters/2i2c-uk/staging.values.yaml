@@ -11,11 +11,6 @@ jupyterhub-home-nfs:
     volumeId: projects/two-eye-two-see-uk/zones/europe-west2-b/disks/hub-nfs-homedirs-staging
 
 jupyterhub:
-  ingress:
-    hosts: [staging.uk.2i2c.cloud]
-    tls:
-    - hosts: [staging.uk.2i2c.cloud]
-      secretName: https-auto-tls
   singleuser:
     image:
       name: pangeo/pangeo-notebook

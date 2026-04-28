@@ -15,11 +15,6 @@ basehub:
               2i2c/hub-name: staging
 
   jupyterhub:
-    ingress:
-      hosts: [staging.ghg.2i2c.cloud]
-      tls:
-      - hosts: [staging.ghg.2i2c.cloud]
-        secretName: https-auto-tls
     custom:
       homepage:
         gitRepoBranch: staging

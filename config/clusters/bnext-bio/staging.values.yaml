@@ -7,11 +7,6 @@ userServiceAccount:
     eks.amazonaws.com/role-arn: arn:aws:iam::882437028641:role/bnext-bio-staging
 
 jupyterhub:
-  ingress:
-    hosts: [staging.hub.nucleus.engineering]
-    tls:
-    - hosts: [staging.hub.nucleus.engineering]
-      secretName: https-auto-tls
   hub:
     config:
       JupyterHub:

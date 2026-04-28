@@ -1,9 +1,4 @@
 jupyterhub:
-  ingress:
-    hosts: [staging.utoronto.2i2c.cloud]
-    tls:
-    - hosts: [staging.utoronto.2i2c.cloud]
-      secretName: https-auto-tls
   hub:
     config:
       GenericOAuthenticator:

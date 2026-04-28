@@ -10,11 +10,6 @@ jupyterhub-home-nfs:
     volumeId: vol-097e117991afc3759
 
 jupyterhub:
-  ingress:
-    hosts: [staging.jupyter-health.2i2c.cloud]
-    tls:
-    - hosts: [staging.jupyter-health.2i2c.cloud]
-      secretName: https-auto-tls
   hub:
     config:
       GenericOAuthenticator:

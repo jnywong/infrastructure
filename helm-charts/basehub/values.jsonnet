@@ -1,5 +1,6 @@
 local hub_name = std.extVar('VARS_2I2C_HUB_NAME');
 local provider = std.extVar('VARS_2I2C_PROVIDER');
+local hub_domain = std.extVar('VARS_2I2C_HUB_DOMAIN');
 
 // Assume we are a staging hub if the word 'staging' is in the
 // name of the hub.
@@ -117,8 +118,23 @@ local nfsConfig = {
   },
 };
 
+local hubIngressConfig = {
+  hosts: [hub_domain],
+  tls: [
+    {
+      hosts: [hub_domain],
+      secretName: 'https-auto-tls',
+    },
+  ],
+};
+
+local jupyterhubConfig = {
+  ingress: hubIngressConfig,
+};
+
 emitDaskHubCompatibleConfig({
   nfs: nfsConfig,
   'jupyterhub-home-nfs': jupyterhubHomeNFSConfig,
   'jupyterhub-groups-exporter': jupyterhubGroupsExporterConfig,
+  jupyterhub: jupyterhubConfig,
 })

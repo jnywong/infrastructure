@@ -19,12 +19,6 @@ jupyterhub:
         # Disable for now the authentication token refreshing
         # https://oauthenticator.readthedocs.io/en/latest/reference/api/gen/oauthenticator.oauth2.html#oauthenticator.oauth2.OAuthenticator.auth_refresh_age
         auth_refresh_age: 0
-  ingress:
-    hosts: [staging.hub.disasters.2i2c.cloud]
-    tls:
-    - hosts: [staging.hub.disasters.2i2c.cloud]
-      secretName: https-auto-tls
-
 dask-gateway:
   gateway:
     backend:

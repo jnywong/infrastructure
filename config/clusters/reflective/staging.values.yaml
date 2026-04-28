@@ -5,11 +5,6 @@ userServiceAccount:
   annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::916143380841:role/reflective-staging
 jupyterhub:
-  ingress:
-    hosts: [staging.reflective.2i2c.cloud]
-    tls:
-    - hosts: [staging.reflective.2i2c.cloud]
-      secretName: https-auto-tls
   hub:
     config:
       GitHubOAuthenticator:

@@ -1,9 +1,4 @@
 jupyterhub:
-  ingress:
-    hosts: [{{ hub_name }}.{{ cluster_name }}.2i2c.cloud]
-    tls:
-      - hosts: [{{ hub_name }}.{{ cluster_name }}.2i2c.cloud]
-        secretName: https-auto-tls
   hub:
     config:
       GitHubOAuthenticator:
