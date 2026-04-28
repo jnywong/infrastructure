@@ -173,7 +173,15 @@ function(VARS_2I2C_AWS_ACCOUNT_ID=null)
     },
   };
 
+
   {
+    grafana: {
+      serviceAccount: {
+        annotations: if provider_name == 'aws' then {
+          'eks.amazonaws.com/role-arn': 'arn:aws:iam::%s:role/jupyterhub_grafana_cloudwatch' % VARS_2I2C_AWS_ACCOUNT_ID,
+        } else {}
+      }
+    },
     prometheus: {
       alertmanager: {
         enabled: true,
