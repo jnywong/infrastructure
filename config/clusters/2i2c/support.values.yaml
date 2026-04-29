@@ -7,8 +7,17 @@ prometheusStorageClass:
 
 prometheus:
   server:
+    # Tune down resources, as there's only 1 hub here now
+    resources:
+      requests:
+        cpu: 0.01
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
     persistentVolume:
-      # 100Gi filled up, and this is source of our billing data.
+      # This *used* to be the source of our shared cluster billing
+      # data, so is larger
       size: 512Gi
       storageClass: balanced-rwo-retain
     ingress:

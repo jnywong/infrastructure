@@ -54,7 +54,32 @@ jupyterhub:
 jupyterhub-home-nfs:
   gke:
     volumeId: projects/two-eye-two-see/zones/us-central1-b/disks/hub-nfs-homedirs-mtu
-
+  quotaEnforcer:
+    resources:
+      requests:
+        cpu: 0.001
+        memory: 32Mi
+      limits:
+        cpu: 0.2
+        memory: 256Mi
+  nfsServer:
+    resources:
+      requests:
+        cpu: 0.02
+        memory: 512Mi
+      limits:
+        cpu: 0.1
+        memory: 1Gi
+  nodeExporter:
+    resources:
+      requests:
+        cpu: 0.001
+      limits:
+        cpu: 0.1
+  autoResizer:
+    resources:
+      requests:
+        cpu: 0.001
 nfs:
   pv:
     serverIP: storage-quota-home-nfs.mtu.svc.cluster.local
