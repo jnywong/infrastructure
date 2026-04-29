@@ -16,8 +16,6 @@ jupyterhub:
     config:
       JupyterHub:
         authenticator_class: github
-      GitHubOAuthenticator:
-        oauth_callback_url: https://hub.nucleus.engineering/hub/oauth_callback
   singleuser:
     image:
       name: quay.io/nucleus/nucleus-hub

@@ -29,10 +29,6 @@ basehub:
       tls:
       - hosts: [hub.victorproject.org]
         secretName: https-auto-tls
-    hub:
-      config:
-        CILogonOAuthenticator:
-          oauth_callback_url: https://hub.victorproject.org/hub/oauth_callback
     singleuser:
       nodeSelector:
         2i2c/hub-name: prod

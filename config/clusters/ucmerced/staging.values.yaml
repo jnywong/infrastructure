@@ -55,10 +55,6 @@ jupyterhub:
             kubespawner_override:
               image: '{value}'
           choices: {}
-  hub:
-    config:
-      CILogonOAuthenticator:
-        oauth_callback_url: https://staging.ucmerced.2i2c.cloud/hub/oauth_callback
 jupyterhub-home-nfs:
   eks:
     volumeId: vol-09923c5867cea492a

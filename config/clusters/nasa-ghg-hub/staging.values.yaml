@@ -23,9 +23,6 @@ basehub:
       image:
         name: quay.io/2i2c/jupyterhub-usage-quotas
         tag: 1389e6181c78ec61e9c3c5e430e8840758d0854c
-      config:
-        GitHubOAuthenticator:
-          oauth_callback_url: https://staging.ghg.2i2c.cloud/hub/oauth_callback
       extraConfig:
         11-usage-quotas-viewer: |
           from jupyterhub_usage_quotas import setup_usage_quotas

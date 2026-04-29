@@ -14,12 +14,6 @@ basehub:
       extraEnv:
         SCRATCH_BUCKET: s3://openscapeshub-scratch/$(JUPYTERHUB_USER)
         PERSISTENT_BUCKET: s3://openscapeshub-persistent/$(JUPYTERHUB_USER)
-    hub:
-      config:
-        GitHubOAuthenticator:
-          oauth_callback_url: https://openscapes.2i2c.cloud/hub/oauth_callback
-        CILogonOAuthenticator:
-          oauth_callback_url: https://openscapes.2i2c.cloud/hub/oauth_callback
 
   dask-gateway:
     gateway:

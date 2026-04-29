@@ -205,7 +205,6 @@ jupyterhub:
   hub:
     config:
       GenericOAuthenticator:
-        oauth_callback_url: https://hub.maap-project.org/hub/oauth_callback
         token_url: https://auth.openveda.cloud/realms/maap/protocol/openid-connect/token
         authorize_url: https://auth.openveda.cloud/realms/maap/protocol/openid-connect/auth
   ingress:

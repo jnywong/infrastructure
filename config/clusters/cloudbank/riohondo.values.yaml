@@ -34,7 +34,6 @@ jupyterhub:
       JupyterHub:
         authenticator_class: github
       GitHubOAuthenticator:
-        oauth_callback_url: https://riohondo.cloudbank.2i2c.cloud/hub/oauth_callback
         allowed_organizations:
         - RHC-DSCI-100
         scope:

@@ -42,7 +42,6 @@ jupyterhub:
       JupyterHub:
         authenticator_class: github
       GitHubOAuthenticator:
-        oauth_callback_url: https://nmfs-openscapes.2i2c.cloud/hub/oauth_callback
         allowed_organizations:
         - fish-pace:2026-hackweek-jupyterhub
         - nmfs-openscapes:longterm-access-2i2c

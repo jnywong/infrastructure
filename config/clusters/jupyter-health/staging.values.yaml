@@ -13,7 +13,6 @@ jupyterhub:
   hub:
     config:
       GenericOAuthenticator:
-        oauth_callback_url: https://staging.jupyter-health.2i2c.cloud/hub/oauth_callback
         client_id: Ima7rx8D6eko0PzlU1jK28WBUT2ZweZj7mqVG2wm
         authorize_url: https://berkeley-jhe-staging.jupyterhealth.org/o/authorize/
         token_url: https://berkeley-jhe-staging.jupyterhealth.org/o/token/

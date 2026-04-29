@@ -37,7 +37,6 @@ jupyterhub:
       JupyterHub:
         authenticator_class: cilogon
       CILogonOAuthenticator:
-        oauth_callback_url: https://stanford.cloudbank.2i2c.cloud/hub/oauth_callback
         allowed_idps:
           urn:mace:incommon:stanford.edu:
             default: true
