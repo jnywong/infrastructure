@@ -65,9 +65,9 @@ dask_nodes = {
   },
 }
 
-user_buckets = { }
+user_buckets = {}
 
 
-hub_cloud_permissions = { }
+hub_cloud_permissions = {}
 
-container_repos = [ ]
+container_repos = []
