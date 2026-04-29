@@ -17,7 +17,7 @@ k8s_versions = {
   dask_nodes_version : "1.34.1-gke.3971001",
 }
 
-core_node_machine_type = "n2-highmem-4"
+core_node_machine_type = "n2-highmem-2"
 enable_network_policy  = true
 
 # Explicitly disabling filestores in favour of persistent disks
@@ -27,10 +27,6 @@ persistent_disks = {
   "staging" = {
     size        = 5 # in GB
     name_suffix = "staging"
-  },
-  "dask-staging" = {
-    size        = 3 # in GB
-    name_suffix = "dask-staging"
   },
   "mtu" = {
     size        = 75 # in GB
@@ -85,6 +81,4 @@ hub_cloud_permissions = {
 }
 
 container_repos = [
-  "binder-staging",
-  "binderhub-ui-demo"
 ]
