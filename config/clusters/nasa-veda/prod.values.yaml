@@ -22,10 +22,6 @@ basehub:
       image:
         # Temporary image with jupyterhub-fancy-profiles 0.6.0
         tag: 0.0.1-0.dev.git.15540.hbaaa997ce
-      config:
-        GitHubOAuthenticator:
-          oauth_callback_url: https://hub.openveda.cloud/hub/oauth_callback
-
   dask-gateway:
     gateway:
       backend:

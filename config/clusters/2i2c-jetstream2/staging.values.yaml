@@ -59,8 +59,6 @@ jupyterhub:
     config:
       JupyterHub:
         authenticator_class: github
-      GitHubOAuthenticator:
-        oauth_callback_url: https://staging.js.2i2c.cloud/hub/oauth_callback
   singleuser:
     defaultUrl: /lab
     nodeSelector:

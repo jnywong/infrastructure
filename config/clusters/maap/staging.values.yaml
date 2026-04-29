@@ -230,7 +230,6 @@ jupyterhub:
         oauth_redirect_uri: https://staging.hub.maap-project.org/services/binder/oauth_callback
     config:
       GenericOAuthenticator:
-        oauth_callback_url: https://staging.hub.maap-project.org/hub/oauth_callback
         token_url: https://keycloak.delta-backend.xyz/realms/maap/protocol/openid-connect/token
         authorize_url: https://keycloak.delta-backend.xyz/realms/maap/protocol/openid-connect/auth
 

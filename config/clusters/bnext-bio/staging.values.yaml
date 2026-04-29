@@ -11,8 +11,6 @@ jupyterhub:
     config:
       JupyterHub:
         authenticator_class: github
-      GitHubOAuthenticator:
-        oauth_callback_url: https://staging.hub.nucleus.engineering/hub/oauth_callback
   singleuser:
     profileList:
     - display_name: Choose your environment and resources

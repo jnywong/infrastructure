@@ -142,7 +142,6 @@ jupyterhub:
         authorize_url: https://login.earthscope.org/authorize
         userdata_url: https://login.earthscope.org/userinfo
         logout_redirect_url: https://login.earthscope.org/v2/logout?client_id=2PbhUTbRU6e7uIaaEZIShotx15MbvsJJ
-        oauth_callback_url: https://hub.binder.geolab.earthscope.cloud/hub/oauth_callback
     redirectToServer: false
     loadRoles:
       binder:

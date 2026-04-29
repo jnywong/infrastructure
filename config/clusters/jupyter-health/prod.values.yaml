@@ -18,7 +18,6 @@ jupyterhub:
   hub:
     config:
       GenericOAuthenticator:
-        oauth_callback_url: https://jupyter-health.2i2c.cloud/hub/oauth_callback
         client_id: bS8rx5PRGM3U3XQm4HBLHhqjNyKQzhKsZchYO0Bd
         authorize_url: https://berkeley-jhe-demo.jupyterhealth.org/o/authorize/
         token_url: https://berkeley-jhe-demo.jupyterhealth.org/o/token/

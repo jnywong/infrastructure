@@ -11,8 +11,6 @@ jupyterhub:
     config:
       JupyterHub:
         authenticator_class: github
-      GitHubOAuthenticator:
-        oauth_callback_url: https://staging.berkeley-geojupyter.2i2c.cloud/hub/oauth_callback
   singleuser:
     extraEnv:
       SCRATCH_BUCKET: s3://berkeley-geojupyter-scratch-staging/$(JUPYTERHUB_USER)

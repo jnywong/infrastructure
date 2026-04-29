@@ -130,6 +130,16 @@ local hubIngressConfig = {
 
 local jupyterhubConfig = {
   ingress: hubIngressConfig,
+  hub: {
+    config: {
+      OAuthenticator: {
+        // Always set oauth callback URL, to prevent it from being
+        // guessed 'wrong'.
+        oauth_callback_url: 'https://%s/hub/oauth_callback' % [hub_domain],
+      },
+
+    },
+  },
 };
 
 emitDaskHubCompatibleConfig({
