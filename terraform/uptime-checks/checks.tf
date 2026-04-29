@@ -125,7 +125,7 @@ resource "google_monitoring_alert_policy" "hub_https_certificate_expiry_alert" {
   project = var.project_id
 
   # Send a notification to our PagerDuty channel when this is triggered
-  notification_channels = [google_monitoring_notification_channel.pagerduty_hubs.name]
+  notification_channels = [google_monitoring_notification_channel.pagerduty_certificates.name]
 }
 
 resource "google_monitoring_uptime_check_config" "prometheus_simple_uptime_check" {
