@@ -65,20 +65,9 @@ dask_nodes = {
   },
 }
 
-user_buckets = {
-  "scratch-dask-staging" : {
-    "delete_after" : 7,
-  },
-}
+user_buckets = { }
 
 
-hub_cloud_permissions = {
-  "dask-staging" : {
-    allow_access_to_external_requester_pays_buckets : true,
-    bucket_admin_access : ["scratch-dask-staging"],
-    hub_namespace : "dask-staging",
-  },
-}
+hub_cloud_permissions = { }
 
-container_repos = [
-]
+container_repos = [ ]
