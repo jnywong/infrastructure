@@ -65,7 +65,7 @@ binderhub-service:
       base_url: /services/binder
       use_registry: true
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2024.07.0-159.gd0ddd2e
+      build_image: quay.io/jupyterhub/repo2docker:2025.12.1.dev94-gd3893dba2
       node_selector:
         # Schedule builder pods to run on user nodes only
         hub.jupyter.org/node-purpose: user
