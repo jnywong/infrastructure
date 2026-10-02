@@ -740,6 +740,12 @@ jupyterhub:
           ServerApp: &server_config_server_app
             extra_template_paths:
               - /usr/local/share/jupyter/custom_template
+            tornado_settings:
+              headers:
+                Cross-Origin-Opener-Policy: same-origin
+                Cross-Origin-Embedder-Policy: require-corp
+              static_path: /srv/repo/dist/extensions/
+              static_url_prefix: /extensions/
           # Move the sqlite file used by https://github.com/jupyter-server/jupyter_server_fileid
           # off the default path, which is under ~/.local/share/jupyter.
           # That is NFS, and sqlite + NFS don't go well together. In addition,
